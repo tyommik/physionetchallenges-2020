@@ -2,7 +2,12 @@
 
 import numpy as np
 import joblib
-from get_12ECG_features import get_12ECG_features
+from tensorflow.keras.models import load_model
+import tensorflow
+from models.turnikecg import Turnikv7
+
+
+from get_ecg_features import get_ecg_features
 
 def run_12ECG_classifier(data,header_data,classes,model):
 
@@ -11,10 +16,12 @@ def run_12ECG_classifier(data,header_data,classes,model):
     current_score = np.zeros(num_classes)
 
     # Use your classifier here to obtain a label and score for each class. 
-    features=np.asarray(get_12ECG_features(data,header_data))
-    feats_reshape = features.reshape(1,-1)
-    label = model.predict(feats_reshape)
-    score = model.predict_proba(feats_reshape)
+    # features=np.asarray(get_12ECG_features(data,header_data))
+    features = get_ecg_features(data)
+    feats_reshape = np.expand_dims(features, axis=0)
+
+    score = model.predict(feats_reshape)
+    label = np.argmax(score, axis=1)
 
     current_label[label] = 1
 
@@ -24,8 +31,12 @@ def run_12ECG_classifier(data,header_data,classes,model):
     return current_label, current_score
 
 def load_12ECG_model():
-    # load the model from disk 
-    filename='finalized_model.sav'
-    loaded_model = joblib.load(filename)
+    # load the model from disk
+    img_rows, img_cols = 5000, 1
+    num_classes = 9
+
+    weights_file ='models/Turnikv7_best_model.h5'
+    loaded_model = load_model(weights_file)
+
 
     return loaded_model
