@@ -4,8 +4,6 @@ import numpy as np
 import joblib
 from tensorflow.keras.models import load_model
 import tensorflow
-from models.turnikecg import Turnikv7
-
 
 from get_ecg_features import get_ecg_features
 
