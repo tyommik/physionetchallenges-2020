@@ -4,6 +4,7 @@ import numpy as np
 import joblib
 from tensorflow.keras.models import load_model
 import tensorflow
+from models.turnikecg import Turnikv7
 
 from get_ecg_features import get_ecg_features
 
@@ -34,7 +35,9 @@ def load_12ECG_model():
     num_classes = 9
 
     weights_file ='models/Turnikv7_best_model.h5'
-    loaded_model = load_model(weights_file)
+    # loaded_model = load_model(weights_file)
+    loaded_model = Turnikv7(input_shape=(img_rows, img_cols), n_classes=num_classes)
+    loaded_model.load_weights(weights_file)
 
 
     return loaded_model
