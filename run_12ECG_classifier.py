@@ -8,7 +8,7 @@ from models.turnikecg import Turnikv7
 
 from get_ecg_features import get_ecg_features
 
-def run_12ECG_classifier(data,header_data,classes,model):
+def run_12ECG_classifier(data, header_data, classes,model):
 
     num_classes = len(classes)
     current_label = np.zeros(num_classes, dtype=int)
@@ -31,7 +31,7 @@ def run_12ECG_classifier(data,header_data,classes,model):
 
 def load_12ECG_model():
     # load the model from disk
-    img_rows, img_cols = 5000, 1
+    img_rows, img_cols = 5000, 12
     num_classes = 9
 
     weights_file ='models/Turnikv7_best_model.h5'
