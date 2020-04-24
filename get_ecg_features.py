@@ -18,18 +18,24 @@ def _zero_pad(waveform, align):
     """Zero pad waveform (align: left, center, right)."""
     # Get remainder
     remainder = LENGTH - len(waveform)
+
+    padded_waveform = np.zeros((12, 5000))
+
     if align == 'left':
         for lead in range(LEADS_NUM):
-            np.pad(waveform[:, lead], (0, remainder), 'constant', constant_values=0)
-        return waveform
+            wave = np.pad(waveform[:, lead], (0, remainder), 'constant', constant_values=0).reshape(1, -1)
+            padded_waveform[lead, :] = wave
+        return padded_waveform
     elif align == 'center':
         for lead in range(LEADS_NUM):
-            np.pad(waveform[:, lead], (int(remainder / 2), remainder - int(remainder / 2)), 'constant', constant_values=0)
-        return waveform
+            wave = np.pad(waveform[:, lead], (int(remainder / 2), remainder - int(remainder / 2)), 'constant', constant_values=0)
+            padded_waveform[lead, :] = wave
+        return padded_waveform
     elif align == 'right':
         for lead in range(LEADS_NUM):
-            return np.pad(waveform[:, lead], (remainder, 0), 'constant', constant_values=0)
-        return waveform
+            wave = np.pad(waveform[:, lead], (remainder, 0), 'constant', constant_values=0)
+            padded_waveform[lead, :] = wave
+        return padded_waveform
 
 
 def get_ecg_features(data):
